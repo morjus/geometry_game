@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from main import Point, Rectangle
+from main import Point, GuiRectangle
 
 
 class TestGame(TestCase):
@@ -17,7 +17,7 @@ class TestGame(TestCase):
     def test_rectangle_area(self):
         lower_left = Point(0, 0)
         upper_right = Point(3, 3)
-        rectangle = Rectangle(point1=lower_left, point2=upper_right)
+        rectangle = GuiRectangle(point1=lower_left, point2=upper_right)
         current_area = upper_right.x * upper_right.y
         self.assertEqual(rectangle.area, current_area)
 
@@ -25,12 +25,12 @@ class TestGame(TestCase):
         lower_left = Point(1, 1)
         upper_right = Point(3, 3)
         point = Point(2, 2)
-        rectangle = Rectangle(point1=lower_left, point2=upper_right)
+        rectangle = GuiRectangle(point1=lower_left, point2=upper_right)
         self.assertTrue(rectangle.is_point_inside(point=point))
 
     def test_is_point_not_inside(self):
         lower_left = Point(1, 1)
         upper_right = Point(3, 3)
         point = Point(4, 4)
-        rectangle = Rectangle(point1=lower_left, point2=upper_right)
+        rectangle = GuiRectangle(point1=lower_left, point2=upper_right)
         self.assertFalse(rectangle.is_point_inside(point=point))

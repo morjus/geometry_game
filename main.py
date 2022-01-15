@@ -1,13 +1,26 @@
 from random import randint
+import turtle
+
+from draw_helper import penup_always
 
 
 class Point:
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: float, y: float):
         self.x = x
         self.y = y
 
     def distance_from_point(self, point):
         return ((self.x - point.x) ** 2 + (self.y - point.y) ** 2) ** 0.5
+
+
+class GuiPoint(Point):
+    @penup_always
+    def draw(self, canvas, size=5, color="red"):
+        canvas.goto(x=self.x, y=self.y)
+        canvas.pendown()
+        canvas.color(color)
+        canvas.dot(size=size)
+        canvas.color("black")
 
 
 class Rectangle:
@@ -17,9 +30,7 @@ class Rectangle:
 
     @property
     def area(self):
-        return (self.point1.x - self.point2.x) * (
-            self.point1.y - self.point2.y
-        )
+        return (self.point1.x - self.point2.x) * (self.point1.y - self.point2.y)
 
     def is_point_inside(self, point: Point):
         return (
@@ -28,26 +39,58 @@ class Rectangle:
         )
 
 
+class GuiRectangle(Rectangle):
+    @penup_always
+    def draw(self, canvas):
+        angle = 90
+        length = self.point2.x - self.point1.x
+        height = self.point2.y - self.point1.y
+
+        canvas.goto(x=self.point1.x, y=self.point1.y)
+        canvas.pendown()
+        canvas.forward(length)
+        canvas.left(angle)
+        canvas.forward(height)
+        canvas.left(angle)
+        canvas.forward(length)
+        canvas.left(angle)
+        canvas.forward(height)
+
+
 def main():
-    lower_left = Point(x=randint(0, 9), y=randint(0, 9))
-    upper_right = Point(x=randint(10, 19), y=randint(10, 19))
-    rectangle = Rectangle(point1=lower_left, point2=upper_right)
+    lower_left = Point(x=randint(0, 400), y=randint(0, 400))
+    upper_right = Point(x=randint(10, 400), y=randint(10, 400))
+    rectangle = GuiRectangle(point1=lower_left, point2=upper_right)
+
     print(
         f"Rectangle Coordinates: "
         f"({rectangle.point1.x}, {rectangle.point1.y}) "
         f"and ({rectangle.point2.x}, {rectangle.point2.y})"
     )
 
-    user_point = Point(
-        x=int(input("Guess X: ")),
-        y=int(input("Guess Y: ")),
+    user_point = GuiPoint(
+        x=float(input("Guess X: ")),
+        y=float(input("Guess Y: ")),
     )
-    user_area = int(input("Guess rectangle area: "))
 
-    print(
-        f"Your point was inside rectangle: {rectangle.is_point_inside(point=user_point)}"
+    user_area = float(input("Guess rectangle area: "))
+
+    point_message = f"Your point was inside rectangle: {rectangle.is_point_inside(point=user_point)}"
+    area_message = f"Your area {user_area} was off by: {rectangle.area - user_area}"
+    print(point_message)
+    print(area_message)
+    input("Press any key to visualisation and exit...")
+
+    myturtle = turtle.Turtle()
+    myturtle.hideturtle()
+    rectangle.draw(canvas=myturtle)
+    user_point.draw(canvas=myturtle)
+    myturtle.write(
+        point_message + "\n" + area_message,
+        align="center",
+        font=("Arial", 15, "normal"),
     )
-    print(f"Your area was off by: {rectangle.area - user_area}")
+    turtle.done()
 
 
 if __name__ == "__main__":
