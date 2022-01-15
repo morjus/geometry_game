@@ -58,15 +58,17 @@ class GuiRectangle(Rectangle):
 
 
 def main():
-    lower_left = Point(x=randint(0, 400), y=randint(0, 400))
-    upper_right = Point(x=randint(10, 400), y=randint(10, 400))
+    max_num = 100
+    lower_left = Point(x=randint(0, max_num), y=randint(0, max_num))
+    upper_right = Point(x=randint(10, max_num), y=randint(10, max_num))
     rectangle = GuiRectangle(point1=lower_left, point2=upper_right)
 
     print(
         f"Rectangle Coordinates: "
-        f"({rectangle.point1.x}, {rectangle.point1.y}) "
-        f"and ({rectangle.point2.x}, {rectangle.point2.y})"
+        f"Left bottom angle (X={rectangle.point1.x}, Y={rectangle.point1.y}) "
+        f"and Right top angle (X={rectangle.point2.x}, Y={rectangle.point2.y})"
     )
+    print("Try to guess dot inside in rectangular! Type coordinate!")
 
     user_point = GuiPoint(
         x=float(input("Guess X: ")),
@@ -79,7 +81,7 @@ def main():
     area_message = f"Your area {user_area} was off by: {rectangle.area - user_area}"
     print(point_message)
     print(area_message)
-    input("Press any key to visualisation and exit...")
+    input("Press enter to visualisation and exit...")
 
     myturtle = turtle.Turtle()
     myturtle.hideturtle()
